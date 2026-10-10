@@ -66,8 +66,7 @@ public class Cliente {
      * @param direccion Dirección del cliente.
      * @param fechaNacimiento Fecha de nacimiento del cliente.
      */
-    public Cliente(String curp, String nombres, String primerApellido,
-                   String segundoApellido, String direccion, LocalDate fechaNacimiento) {
+    public Cliente(String curp, String nombres, String primerApellido, String segundoApellido, String direccion, LocalDate fechaNacimiento) {
         this.curp = curp;
         this.nombres = nombres;
         this.primerApellido = primerApellido;
