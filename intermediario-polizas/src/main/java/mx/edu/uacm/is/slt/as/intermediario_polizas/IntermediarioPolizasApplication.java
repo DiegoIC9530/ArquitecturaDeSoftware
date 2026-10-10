@@ -22,7 +22,7 @@ public class IntermediarioPolizasApplication implements CommandLineRunner {
 
     /**
      * Método ejecutado al iniciar la aplicación Spring Boot.
-     *
+     * Hola esto es una prueba
      * @param args Argumentos pasados en la ejecución.
      * @throws Exception Si ocurre algún error durante la ejecución.
      */
