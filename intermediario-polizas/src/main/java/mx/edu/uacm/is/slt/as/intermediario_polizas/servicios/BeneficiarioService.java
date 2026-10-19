@@ -29,4 +29,12 @@ public class BeneficiarioService {
     public List<Beneficiario> listarLocales() {
         return repositorio.findAll();
     }
+    
+    public Beneficiario guardarLocal(Beneficiario beneficiario) {
+        return repositorio.save(beneficiario);
+    }
+    
+    public void eliminarLocal(Long id) {
+        repositorio.deleteById(id);
+    }
 }

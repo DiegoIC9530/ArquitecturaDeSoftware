@@ -33,4 +33,23 @@ public class ClienteService {
     public Optional<Cliente> buscarLocal(String curp) {
         return repositorio.findById(curp);
     }
+    
+    public Cliente guardarLocal(Cliente cliente) {
+        return repositorio.save(cliente);
+    }
+    
+    public Optional<Cliente> actualizarLocal(String curp, Cliente nuevos) {
+        return repositorio.findById(curp).map(c -> {
+            c.setNombres(nuevos.getNombres());
+            c.setPrimerApellido(nuevos.getPrimerApellido());
+            c.setSegundoApellido(nuevos.getSegundoApellido());
+            c.setDireccion(nuevos.getDireccion());
+            c.setFechaNacimiento(nuevos.getFechaNacimiento());
+            return repositorio.save(c);
+        });
+    }
+    
+    public void eliminarLocal(String curp) {
+        repositorio.deleteById(curp);
+    }
 }
