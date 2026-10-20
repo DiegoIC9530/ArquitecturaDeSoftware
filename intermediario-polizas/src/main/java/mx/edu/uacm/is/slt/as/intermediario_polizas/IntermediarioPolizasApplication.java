@@ -289,6 +289,9 @@ public class IntermediarioPolizasApplication implements CommandLineRunner {
             String confirmacion = scanner.nextLine().trim();
             
             if(confirmacion.equalsIgnoreCase("S")) {
+                // Aquí hacemos la petición DELETE real
+                String respuesta = polizaService.eliminarPoliza(clave);
+                System.out.println("Respuesta del servidor: " + respuesta);
                 System.out.println("¡Solicitud de baja para la póliza " + clave + " procesada!");
             } else {
                 System.out.println("Baja cancelada.");
@@ -297,7 +300,6 @@ public class IntermediarioPolizasApplication implements CommandLineRunner {
             System.out.println("Error al dar de baja la póliza: " + e.getMessage());
         }
     }
-
     // MÉTODOS AUXILIARES DE VALIDACIÓN
 
     /**

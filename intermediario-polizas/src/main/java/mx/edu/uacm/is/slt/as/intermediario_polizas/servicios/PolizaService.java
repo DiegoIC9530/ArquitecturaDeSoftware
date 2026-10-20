@@ -49,4 +49,7 @@ public class PolizaService {
     public String registrarPoliza(Poliza poliza) {
         return adaptador.registrarPoliza(poliza);
     }
+    public String eliminarPoliza(java.util.UUID clave) {
+        return adaptador.eliminarPoliza(clave.toString());
+    }
 }

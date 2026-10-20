@@ -96,5 +96,11 @@ public class SistemaDuenoAdapter {
                 .retrieve()
                 .body(String.class);
     }	
-	
+ // ---------- MÉTODOS PARA BAJAS (DELETE) ----------
+    public String eliminarPoliza(String clave) {
+        return restClient.delete()
+                .uri("/poliza/{clave}", clave)
+                .retrieve()
+                .body(String.class);
+    }
 }//fin de la clase
