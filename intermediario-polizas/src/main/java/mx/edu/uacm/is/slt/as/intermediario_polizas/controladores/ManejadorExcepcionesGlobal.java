@@ -18,7 +18,7 @@ public class ManejadorExcepcionesGlobal {
 	@ExceptionHandler(NullPointerException.class)
     public ResponseEntity<String> manejarClienteNoRegistrado(NullPointerException e) {
         return ResponseEntity.status(404)
-                .body("{\"error\":\"El cliente o registro solicitado no existe.\"}");
+                .body("{\"error\":\"El cliente o registro solicitado no existe.\"} ");
     }
 	
 }

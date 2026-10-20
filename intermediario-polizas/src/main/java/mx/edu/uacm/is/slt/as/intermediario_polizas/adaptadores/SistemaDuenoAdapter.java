@@ -40,7 +40,7 @@ public class SistemaDuenoAdapter {
                 .retrieve()
                 .body(String.class);
     	}catch(Exception e) {
-    		throw new SistemaDuenoNoDisponible("El Sistema Dueño no está disponible" + clave, e);
+    		throw new SistemaDuenoNoDisponible("El Sistema Dueño no está disponible: " + clave, e);
     	}
     }
 
