@@ -29,4 +29,7 @@ public class BeneficiarioService {
     public List<Beneficiario> listarLocales() {
         return repositorio.findAll();
     }
+    public String registrarBeneficiario(Beneficiario beneficiario) {
+        return adaptador.registrarBeneficiario(beneficiario);
+    }
 }
