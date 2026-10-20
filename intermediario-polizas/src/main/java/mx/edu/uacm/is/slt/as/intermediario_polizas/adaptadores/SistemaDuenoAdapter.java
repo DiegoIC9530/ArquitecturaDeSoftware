@@ -34,10 +34,14 @@ public class SistemaDuenoAdapter {
 
     // ---------- PÓLIZAS ----------
     public String obtenerPoliza(String clave) {
+    	try {
         return restClient.get()
                 .uri("/poliza/{clave}", clave)
                 .retrieve()
                 .body(String.class);
+    	}catch(Exception e) {
+    		throw new SistemaDuenoNoDisponible("El Sistema Dueño no está disponible" + clave, e);
+    	}
     }
 
     public String obtenerTodasLasPolizas() {
