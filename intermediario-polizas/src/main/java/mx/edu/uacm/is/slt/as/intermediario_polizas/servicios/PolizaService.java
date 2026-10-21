@@ -46,4 +46,14 @@ public class PolizaService {
     public Optional<Poliza> buscarLocal(UUID clave) {
         return repositorio.findById(clave);
     }
+
+    /**
+     * Valida que el tipo de póliza sea 0 (Auto), 1 (Vida) o 2 (Médico) según ERS 2.7.3.
+     * @param poliza La póliza a validar.
+     */
+    public void validarTipo(Poliza poliza) {
+        if (poliza.getTipo() == null || poliza.getTipo() < 0 || poliza.getTipo() > 2) {
+            throw new IllegalArgumentException("Tipo de póliza debe ser 0 (Auto), 1 (Vida) o 2 (Médico)");
+        }
+    }
 }

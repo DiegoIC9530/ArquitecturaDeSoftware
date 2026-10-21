@@ -33,4 +33,14 @@ public class ClienteService {
     public Optional<Cliente> buscarLocal(String curp) {
         return repositorio.findById(curp);
     }
+
+    /**
+     * Valida el formato de la CURP (18 caracteres alfanuméricos).
+     * @param curp La CURP a validar.
+     */
+    public void validarCurp(String curp) {
+        if (curp == null || !curp.matches("[A-Z]{4}\\d{6}[A-Z0-9]{8}")) {
+            throw new IllegalArgumentException("CURP inválida: " + curp);
+        }
+    }
 }
