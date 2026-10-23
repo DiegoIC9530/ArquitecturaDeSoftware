@@ -98,7 +98,7 @@ public class IntermediarioPolizasApplication implements CommandLineRunner {
             mx.edu.uacm.is.slt.as.intermediario_polizas.modelos.Cliente nuevoCliente = 
                     new mx.edu.uacm.is.slt.as.intermediario_polizas.modelos.Cliente(curp, nombres, primerApellido, segundoApellido, direccion, LocalDate.parse(fechaNacimiento));
                 
-                String respuesta = clienteService.registrarCliente(nuevoCliente);
+            String respuesta = String.valueOf(clienteService.guardarLocal(nuevoCliente));
                 System.out.println("Respuesta del servidor: " + respuesta);
             System.out.println("¡Datos del cliente capturados correctamente para el envío!");
         } catch (Exception e) {
