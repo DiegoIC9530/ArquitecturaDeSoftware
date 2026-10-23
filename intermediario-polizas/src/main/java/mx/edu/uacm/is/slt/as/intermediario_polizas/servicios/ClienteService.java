@@ -33,7 +33,8 @@ public class ClienteService {
     public Optional<Cliente> buscarLocal(String curp) {
         return repositorio.findById(curp);
     }
-    
+
+    // --- MÉTODOS LOCALES (Izel) ---
     public Cliente guardarLocal(Cliente cliente) {
         return repositorio.save(cliente);
     }
@@ -51,5 +52,10 @@ public class ClienteService {
     
     public void eliminarLocal(String curp) {
         repositorio.deleteById(curp);
+    }
+
+    // --- MÉTODOS REMOTOS (Juan) ---
+    public String registrarCliente(Cliente cliente) {
+        return adaptador.registrarCliente(cliente);
     }
 }
