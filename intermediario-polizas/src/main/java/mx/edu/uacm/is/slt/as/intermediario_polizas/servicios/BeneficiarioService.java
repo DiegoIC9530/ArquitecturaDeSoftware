@@ -29,6 +29,17 @@ public class BeneficiarioService {
     public List<Beneficiario> listarLocales() {
         return repositorio.findAll();
     }
+
+    // --- MÉTODOS LOCALES (Izel) ---
+    public Beneficiario guardarLocal(Beneficiario beneficiario) {
+        return repositorio.save(beneficiario);
+    }
+    
+    public void eliminarLocal(Long id) {
+        repositorio.deleteById(id);
+    }
+
+    // --- MÉTODOS REMOTOS (Juan) ---
     public String registrarBeneficiario(Beneficiario beneficiario) {
         return adaptador.registrarBeneficiario(beneficiario);
     }
