@@ -33,4 +33,7 @@ public class ClienteService {
     public Optional<Cliente> buscarLocal(String curp) {
         return repositorio.findById(curp);
     }
+    public String registrarCliente(Cliente cliente) {
+        return adaptador.registrarCliente(cliente);
+    }
 }

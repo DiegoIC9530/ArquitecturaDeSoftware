@@ -71,31 +71,36 @@ public class SistemaDuenoAdapter {
                 .body(String.class);
     }
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+ // ---------- MÉTODOS PARA ALTAS (POST) ----------
+
+    public String registrarCliente(Object cliente) {
+        return restClient.post()
+                .uri("/cliente")
+                .body(cliente)
+                .retrieve()
+                .body(String.class);
+    }
+
+    public String registrarPoliza(Object poliza) {
+        return restClient.post()
+                .uri("/poliza")
+                .body(poliza)
+                .retrieve()
+                .body(String.class);
+    }
+
+    public String registrarBeneficiario(Object beneficiario) {
+        return restClient.post()
+                .uri("/beneficiario")
+                .body(beneficiario)
+                .retrieve()
+                .body(String.class);
+    }	
+ // ---------- MÉTODOS PARA BAJAS (DELETE) ----------
+    public String eliminarPoliza(String clave) {
+        return restClient.delete()
+                .uri("/poliza/{clave}", clave)
+                .retrieve()
+                .body(String.class);
+    }
 }//fin de la clase
