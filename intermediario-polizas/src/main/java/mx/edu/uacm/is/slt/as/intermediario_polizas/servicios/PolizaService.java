@@ -47,6 +47,34 @@ public class PolizaService {
         return repositorio.findById(clave);
     }
 
+    // --- MÉTODOS LOCALES (Izel) ---
+    public Poliza guardarLocal(Poliza poliza) {
+        return repositorio.save(poliza);
+    }
+    
+    public Optional<Poliza> actualizarLocal(UUID clave, Poliza nuevos) {
+        return repositorio.findById(clave).map(p -> {
+            p.setTipo(nuevos.getTipo());
+            p.setMonto(nuevos.getMonto());
+            p.setDescripcion(nuevos.getDescripcion());
+            return repositorio.save(p);
+        });
+    }
+    
+    public void eliminarLocal(UUID clave) {
+        repositorio.deleteById(clave);
+    }
+
+    // --- MÉTODOS REMOTOS (Juan) ---
+    public String registrarPoliza(Poliza poliza) {
+        return adaptador.registrarPoliza(poliza);
+    }
+    
+    public String eliminarPoliza(java.util.UUID clave) {
+        return adaptador.eliminarPoliza(clave.toString());
+    }
+
+    // --- VALIDACIONES (Joel) ---
     /**
      * Valida que el tipo de póliza sea 0 (Auto), 1 (Vida) o 2 (Médico) según ERS 2.7.3.
      * @param poliza La póliza a validar.
