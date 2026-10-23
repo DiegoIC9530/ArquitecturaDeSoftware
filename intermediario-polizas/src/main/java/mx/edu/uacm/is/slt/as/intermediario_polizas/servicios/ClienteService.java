@@ -58,4 +58,15 @@ public class ClienteService {
     public String registrarCliente(Cliente cliente) {
         return adaptador.registrarCliente(cliente);
     }
+
+    // --- VALIDACIONES (Joel) ---
+    /**
+     * Valida el formato de la CURP (18 caracteres alfanuméricos).
+     * @param curp La CURP a validar.
+     */
+    public void validarCurp(String curp) {
+        if (curp == null || !curp.matches("[A-Z]{4}\\d{6}[A-Z0-9]{8}")) {
+            throw new IllegalArgumentException("CURP inválida: " + curp);
+        }
+    }
 }
