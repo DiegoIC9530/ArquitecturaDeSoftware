@@ -1,0 +1,97 @@
+# ==========================================
+# Maven / Build Target
+# ==========================================
+target/
+build/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# ==========================================
+# Compiled Class Files & Packages
+# ==========================================
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.zip
+*.tar.gz
+*.rar
+
+# ==========================================
+# Logs & Temporary Files
+# ==========================================
+*.log
+logs/
+*.tmp
+*.bak
+*.swp
+*~
+hs_err_pid*
+replay_pid*
+
+# ==========================================
+# Eclipse / Spring Tool Suite (STS)
+# ==========================================
+.classpath
+.project
+.settings/
+.factorypath
+.apt_generated
+.apt_generated_tests
+.springBeans
+.sts4-cache/
+.checkstyle
+
+# ==========================================
+# IntelliJ IDEA
+# ==========================================
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# ==========================================
+# VS Code
+# ==========================================
+.vscode/
+
+# ==========================================
+# NetBeans
+# ==========================================
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# ==========================================
+# Operating System Files
+# ==========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ==========================================
+# Local / Sensitive Configurations & Databases
+# ==========================================
+*.env
+*.env.local
+application-local.properties
+application-dev.properties
+application-secrets.properties
+*.db
+*.sqlite
+*.sqlite3
+*.h2.db
+
+# Help / Documentation metadata
+HELP.md
