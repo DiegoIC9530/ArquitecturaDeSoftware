@@ -4,8 +4,6 @@ import mx.edu.uacm.is.slt.as.intermediario_polizas.adaptadores.SistemaDuenoAdapt
 import mx.edu.uacm.is.slt.as.intermediario_polizas.modelos.Poliza;
 import mx.edu.uacm.is.slt.as.intermediario_polizas.repositorios.PolizaRepository;
 import org.springframework.stereotype.Service;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,87 +47,41 @@ public class PolizaService {
         return repositorio.findById(clave);
     }
 
-
-//GUARDAR POLIZA
-@Transactional
-public Poliza guardarLocal(Poliza poliza) {
-
- if (poliza == null) {
-     throw new IllegalArgumentException("La póliza no puede estar vacía");
- }
-
- if (poliza.getClave() != null &&
-         repositorio.existsById(poliza.getClave())) {
-     throw new IllegalArgumentException("La póliza ya existe");
- }
-
- return repositorio.save(poliza);
-}
-
-//ACTUALIZAR POLIZA
-@Transactional
-public Poliza actualizarLocal(UUID clave, Poliza datos) {
-
- if (datos == null) {
-     throw new IllegalArgumentException("Los datos no pueden estar vacíos");
- }
-
- Poliza existente = repositorio.findById(clave)
-         .orElseThrow(() -> new EntityNotFoundException(
-                 "No existe la póliza"));
-
- existente.setTipo(datos.getTipo());
- existente.setMonto(datos.getMonto());
- existente.setDescripcion(datos.getDescripcion());
- existente.setCliente(datos.getCliente());
-
- return repositorio.save(existente);
-}
-
-    // ---------- ESCRITURA EN EL SISTEMA DUEÑO ----------
-
-    public String altaPoliza(Poliza p) {
-        validarPoliza(p);
-        requerido(p.getClave(), "clave");
-        return adaptador.altaPoliza(p.getClave().toString(), p.getTipo(), p.getMonto().toPlainString(),
-                p.getDescripcion(), p.getCliente().getCurp());
+    // --- MÉTODOS LOCALES (Izel) ---
+    public Poliza guardarLocal(Poliza poliza) {
+        return repositorio.save(poliza);
+    }
+    
+    public Optional<Poliza> actualizarLocal(UUID clave, Poliza nuevos) {
+        return repositorio.findById(clave).map(p -> {
+            p.setTipo(nuevos.getTipo());
+            p.setMonto(nuevos.getMonto());
+            p.setDescripcion(nuevos.getDescripcion());
+            return repositorio.save(p);
+        });
+    }
+    
+    public void eliminarLocal(UUID clave) {
+        repositorio.deleteById(clave);
     }
 
-    public String modificarPoliza(String clave, Poliza p) {
-        validarPoliza(p);
-        return adaptador.modificarPoliza(clave, p.getTipo(), p.getMonto().toPlainString(),
-                p.getDescripcion(), p.getCliente().getCurp());
+    // --- MÉTODOS REMOTOS (Juan) ---
+    public String registrarPoliza(Poliza poliza) {
+        return adaptador.registrarPoliza(poliza);
+    }
+    
+    public String eliminarPoliza(java.util.UUID clave) {
+        return adaptador.eliminarPoliza(clave.toString());
     }
 
-    public String bajaPoliza(String clave) {
-        if (clave == null || clave.isBlank()) {
-            throw new IllegalArgumentException("La clave de la póliza es obligatoria");
-        }
-        return adaptador.bajaPoliza(clave);
-    }
-
-    private void validarPoliza(Poliza p) {
-        if (p == null) {
-            throw new IllegalArgumentException("Los datos de la póliza son obligatorios");
-        }
-        requerido(p.getTipo(), "tipo");
-        if (p.getTipo() < 0 || p.getTipo() > 2) {
-            throw new IllegalArgumentException("El tipo debe ser 0 (auto), 1 (vida) o 2 (médico)");
-        }
-        requerido(p.getMonto(), "monto");
-        if (p.getMonto().signum() <= 0) {
-            throw new IllegalArgumentException("El monto debe ser mayor a cero");
-        }
-        requerido(p.getDescripcion(), "descripcion");
-        if (p.getCliente() == null) {
-            throw new IllegalArgumentException("La póliza debe indicar el cliente (curp)");
-        }
-        requerido(p.getCliente().getCurp(), "cliente.curp");
-    }
-
-    private static void requerido(Object valor, String campo) {
-        if (valor == null || valor.toString().isBlank()) {
-            throw new IllegalArgumentException("El campo '" + campo + "' es obligatorio");
+    // --- VALIDACIONES (Joel) ---
+    /**
+     * Valida que el tipo de póliza sea 0 (Auto), 1 (Vida) o 2 (Médico) según ERS 2.7.3.
+     * @param poliza La póliza a validar.
+     */
+    public void validarTipo(Poliza poliza) {
+        if (poliza.getTipo() == null || poliza.getTipo() < 0 || poliza.getTipo() > 2) {
+            throw new IllegalArgumentException("Tipo de póliza debe ser 0 (Auto), 1 (Vida) o 2 (Médico)");
         }
     }
 }
