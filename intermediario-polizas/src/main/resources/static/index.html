@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Intermediario de Pólizas</title>
+  <style>
+    :root {
+      --fondo: #f4f3f0;
+      --panel: #eae8e3;
+      --campo: #ffffff;
+      --texto: #1c1b19;
+      --suave: #6e6b65;
+      --acento: #1c1b19;
+      --acento-hover: #3a3833;
+      --error: #a33a2a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.55;
+      background: var(--fondo);
+      color: var(--texto);
+    }
+    header {
+      padding: 36px 24px 8px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    header p {
+      margin: 4px 0 0;
+      color: var(--suave);
+    }
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 16px 24px 48px;
+    }
+    .tabs {
+      display: inline-flex;
+      gap: 4px;
+      background: var(--panel);
+      padding: 4px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+    }
+    .tab {
+      background: transparent;
+      border: none;
+      color: var(--suave);
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font: inherit;
+    }
+    .tab:hover { color: var(--texto); }
+    .tab.activa {
+      background: var(--campo);
+      color: var(--texto);
+      font-weight: 600;
+    }
+    .bloque {
+      background: var(--panel);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 12px;
+    }
+    .bloque h2 {
+      margin: 0 0 2px;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .bloque .ayuda {
+      margin: 0 0 16px;
+      color: var(--suave);
+      font-size: 0.9rem;
+    }
+    .campos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--suave);
+      margin-bottom: 6px;
+    }
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      font: inherit;
+      color: var(--texto);
+      background: var(--campo);
+      border: none;
+      border-radius: 6px;
+    }
+    input:focus {
+      outline: 2px solid var(--acento);
+      outline-offset: 0;
+    }
+    button.accion {
+      background: var(--acento);
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font: inherit;
+      cursor: pointer;
+    }
+    button.accion:hover { background: var(--acento-hover); }
+    button.accion:disabled { opacity: 0.5; cursor: wait; }
+    .resultado {
+      margin-top: 24px;
+    }
+    .estado {
+      font-size: 0.9rem;
+      color: var(--suave);
+      margin-bottom: 10px;
+    }
+    .estado.error { color: var(--error); }
+    pre {
+      background: var(--texto);
+      color: #ece9e2;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      margin: 0;
+      max-height: 420px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    footer {
+      text-align: center;
+      color: var(--suave);
+      font-size: 0.85rem;
+      padding: 0 24px 32px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Intermediario de Pólizas</h1>
+  <p>Consulta de pólizas, clientes y beneficiarios</p>
+</header>
+
+<main>
+  <nav class="tabs">
+    <button class="tab activa" data-panel="polizas">Pólizas</button>
+    <button class="tab" data-panel="clientes">Clientes</button>
+    <button class="tab" data-panel="beneficiarios">Beneficiarios</button>
+  </nav>
+
+  <!-- PÓLIZAS -->
+  <section id="polizas" class="panel">
+    <div class="bloque">
+      <h2>Consultar póliza por clave</h2>
+      <p class="ayuda">Escribe la clave de la póliza.</p>
+      <div class="campos">
+        <div><label for="p-clave">Clave</label><input id="p-clave"></div>
+      </div>
+      <button class="accion" data-accion="polizaPorClave">Consultar</button>
+    </div>
+
+    <div class="bloque">
+      <h2>Pólizas de un cliente</h2>
+      <p class="ayuda">Escribe la CURP del cliente.</p>
+      <div class="campos">
+        <div><label for="p-curp">CURP</label><input id="p-curp"></div>
+      </div>
+      <button class="accion" data-accion="polizasPorCliente">Buscar</button>
+    </div>
+
+    <div class="bloque">
+      <h2>Pólizas por tipo</h2>
+      <p class="ayuda">Escribe el número de tipo de póliza.</p>
+      <div class="campos">
+        <div><label for="p-tipo">Tipo</label><input id="p-tipo" type="number" min="0"></div>
+      </div>
+      <button class="accion" data-accion="polizasPorTipo">Buscar</button>
+    </div>
+
+    <div class="bloque">
+      <h2>Todas las pólizas</h2>
+      <p class="ayuda">Muestra el listado completo.</p>
+      <button class="accion" data-accion="todasLasPolizas">Listar todas</button>
+    </div>
+  </section>
+
+  <!-- CLIENTES -->
+  <section id="clientes" class="panel" hidden>
+    <div class="bloque">
+      <h2>Consultar cliente</h2>
+      <p class="ayuda">Escribe la CURP del cliente.</p>
+      <div class="campos">
+        <div><label for="c-curp">CURP</label><input id="c-curp"></div>
+      </div>
+      <button class="accion" data-accion="clientePorCurp">Consultar</button>
+    </div>
+  </section>
+
+  <!-- BENEFICIARIOS -->
+  <section id="beneficiarios" class="panel" hidden>
+    <div class="bloque">
+      <h2>Consultar beneficiario</h2>
+      <p class="ayuda">Completa todos los datos del beneficiario.</p>
+      <div class="campos">
+        <div><label for="b-fecha">Fecha de nacimiento</label><input id="b-fecha" type="date"></div>
+        <div><label for="b-clave">Clave de la póliza</label><input id="b-clave"></div>
+        <div><label for="b-nombres">Nombre(s)</label><input id="b-nombres"></div>
+        <div><label for="b-apellido">Apellido</label><input id="b-apellido"></div>
+      </div>
+      <button class="accion" data-accion="beneficiario">Consultar</button>
+    </div>
+  </section>
+
+  <div class="bloque resultado">
+    <div id="estado" class="estado">Aquí aparecerá el resultado de tu consulta.</div>
+    <pre id="salida"></pre>
+  </div>
+</main>
+
+<footer>Sistema Intermediario de Pólizas</footer>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const valor = (id) => $(id).value.trim();
+  const seg = (texto) => encodeURIComponent(texto);
+
+  // Cambio de pestañas
+  document.querySelectorAll('.tab').forEach((boton) => {
+    boton.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach((b) => b.classList.remove('activa'));
+      document.querySelectorAll('.panel').forEach((p) => (p.hidden = true));
+      boton.classList.add('activa');
+      $(boton.dataset.panel).hidden = false;
+    });
+  });
+
+  // Rutas de la API para cada acción
+  const acciones = {
+    polizaPorClave:    () => `/polizas/${seg(valor('p-clave'))}`,
+    polizasPorCliente: () => `/polizas/cliente/${seg(valor('p-curp'))}`,
+    polizasPorTipo:    () => `/polizas/tipo/${seg(valor('p-tipo'))}`,
+    todasLasPolizas:   () => `/polizas`,
+    clientePorCurp:    () => `/clientes/${seg(valor('c-curp'))}`,
+    beneficiario:      () => `/beneficiarios/${seg(valor('b-fecha'))}/${seg(valor('b-clave'))}/${seg(valor('b-nombres'))}/${seg(valor('b-apellido'))}`
+  };
+
+  // Campos obligatorios por acción
+  const requeridos = {
+    polizaPorClave: ['p-clave'],
+    polizasPorCliente: ['p-curp'],
+    polizasPorTipo: ['p-tipo'],
+    clientePorCurp: ['c-curp'],
+    beneficiario: ['b-fecha', 'b-clave', 'b-nombres', 'b-apellido']
+  };
+
+  document.querySelectorAll('button[data-accion]').forEach((boton) => {
+    boton.addEventListener('click', () => consultar(boton));
+  });
+
+  async function consultar(boton) {
+    const nombre = boton.dataset.accion;
+
+    const faltantes = (requeridos[nombre] || []).filter((id) => !valor(id));
+    if (faltantes.length) {
+      mostrar('Por favor completa todos los campos.', '', true);
+      return;
+    }
+
+    boton.disabled = true;
+    mostrar('Consultando...', '');
+
+    try {
+      const respuesta = await fetch('/api' + acciones[nombre]());
+      const texto = await respuesta.text();
+
+      let contenido = texto || '(sin contenido)';
+      try {
+        contenido = JSON.stringify(JSON.parse(texto), null, 2);
+      } catch (_) { /* no es JSON, se muestra tal cual */ }
+
+      if (!respuesta.ok) {
+        mostrar(`Error ${respuesta.status}: no se pudo obtener la información.`, contenido, true);
+      } else {
+        mostrar('Consulta realizada correctamente.', contenido);
+      }
+    } catch (e) {
+      mostrar('No se pudo conectar con el servidor. Verifica que la aplicación esté en marcha.', '', true);
+    } finally {
+      boton.disabled = false;
+    }
+  }
+
+  function mostrar(mensaje, contenido, esError = false) {
+    const estado = $('estado');
+    estado.textContent = mensaje;
+    estado.classList.toggle('error', esError);
+    $('salida').textContent = contenido;
+  }
+</script>
+
+</body>
+</html>
