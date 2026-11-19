@@ -29,16 +29,11 @@ public class PolizaController {
      * Consulta una póliza específica en el Sistema Dueño por su clave.
      *
      * @param clave El identificador único (UUID) de la póliza.
-     * @return El JSON de la póliza o un error 503 si el sistema no responde.
+     * @return El JSON de la póliza o un error si no se encuentra o el sistema no responde.
      */
     @GetMapping("/{clave}")
     public ResponseEntity<String> consultarPorClave(@PathVariable String clave) {
-        try {
-            return ResponseEntity.ok(service.consultarPoliza(clave));
-        } catch (Exception e) {
-            return ResponseEntity.status(503)
-                    .body("{\"error\":\"Sistema Dueno no disponible\"}");
-        }
+        return ResponseEntity.ok(service.consultarPoliza(clave));
     }
 
     /**
@@ -48,12 +43,7 @@ public class PolizaController {
      */
     @GetMapping
     public ResponseEntity<String> listarTodas() {
-        try {
-            return ResponseEntity.ok(service.listarTodas());
-        } catch (Exception e) {
-            return ResponseEntity.status(503)
-                    .body("{\"error\":\"Sistema Dueno no disponible\"}");
-        }
+        return ResponseEntity.ok(service.listarTodas());
     }
 
     /**
@@ -64,12 +54,7 @@ public class PolizaController {
      */
     @GetMapping("/cliente/{curp}")
     public ResponseEntity<String> listarPorCliente(@PathVariable String curp) {
-        try {
-            return ResponseEntity.ok(service.listarPorCliente(curp));
-        } catch (Exception e) {
-            return ResponseEntity.status(503)
-                    .body("{\"error\":\"Sistema Dueno no disponible\"}");
-        }
+        return ResponseEntity.ok(service.listarPorCliente(curp));
     }
 
     /**
@@ -80,12 +65,7 @@ public class PolizaController {
      */
     @GetMapping("/tipo/{tipo}")
     public ResponseEntity<String> listarPorTipo(@PathVariable int tipo) {
-        try {
-            return ResponseEntity.ok(service.listarPorTipo(tipo));
-        } catch (Exception e) {
-            return ResponseEntity.status(503)
-                    .body("{\"error\":\"Sistema Dueno no disponible\"}");
-        }
+        return ResponseEntity.ok(service.listarPorTipo(tipo));
     }
 
     /**

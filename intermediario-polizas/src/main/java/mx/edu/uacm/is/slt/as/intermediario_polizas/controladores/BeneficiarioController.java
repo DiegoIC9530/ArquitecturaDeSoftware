@@ -39,14 +39,21 @@ public class BeneficiarioController {
                                              @PathVariable String clave,
                                              @PathVariable String nombres,
                                              @PathVariable String apellido) {
-        try {
-            return ResponseEntity.ok(
-                service.consultarBeneficiario(fecha, clave, nombres, apellido)
-            );
-        } catch (Exception e) {
-            return ResponseEntity.status(503)
-                    .body("{\"error\":\"Sistema Dueno no disponible\"}");
-        }
+        return ResponseEntity.ok(
+            service.consultarBeneficiario(fecha, clave, nombres, apellido, null)
+        );
+    }
+
+    /** Consulta un beneficiario que tiene segundo apellido. */
+    @GetMapping("/{fecha}/{clave}/{nombres}/{apellido}/{segundo}")
+    public ResponseEntity<String> consultarConSegundo(@PathVariable String fecha,
+                                                      @PathVariable String clave,
+                                                      @PathVariable String nombres,
+                                                      @PathVariable String apellido,
+                                                      @PathVariable String segundo) {
+        return ResponseEntity.ok(
+            service.consultarBeneficiario(fecha, clave, nombres, apellido, segundo)
+        );
     }
 
     /**
