@@ -1,68 +1,44 @@
 package mx.edu.uacm.is.slt.as.intermediario_polizas.modelos;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import java.time.LocalDate;
 
 /**
- * Entidad JPA que representa la tabla 'beneficiario_poliza' en la base de datos PostgreSQL.
+ * Datos del beneficiario de una póliza, tal como los maneja el Sistema Dueño.
  */
-@Entity
-@Table(name = "beneficiario_poliza")
 public class Beneficiario {
-
-    /**
-     * Identificador autogenerado (PK subrogada exigida por JPA).
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     /**
      * Nombres del beneficiario.
      */
-    @Column(name = "nombres", length = 128, nullable = false)
     private String nombres;
 
     /**
      * Primer apellido del beneficiario.
      */
-    @Column(name = "primer_apellido", length = 128, nullable = false)
     private String primerApellido;
 
     /**
      * Segundo apellido del beneficiario (opcional).
      */
-    @Column(name = "segundo_apellido", length = 128, nullable = true)
     private String segundoApellido;
 
     /**
      * Fecha de nacimiento del beneficiario.
      */
-    @Column(name = "fecha_nacimiento", nullable = false)
     private LocalDate fechaNacimiento;
 
     /**
      * Porcentaje asignado de la póliza.
      */
-    @Column(name = "porcentaje", nullable = false)
     private Integer porcentaje;
 
     /**
-     * Relación Muchos a Uno con la entidad Póliza (Llave Foránea 'clave_poliza').
+     * Póliza a la que pertenece el beneficiario.
      */
-    @ManyToOne
-    @JoinColumn(name = "clave_poliza", referencedColumnName = "clave", nullable = false)
     private Poliza poliza;
 
     /**
-     * Constructor vacío exigido por JPA.
+     * Constructor por defecto, necesario para convertir los datos JSON.
      */
     public Beneficiario() {
     }
@@ -85,24 +61,6 @@ public class Beneficiario {
         this.fechaNacimiento = fechaNacimiento;
         this.porcentaje = porcentaje;
         this.poliza = poliza;
-    }
-
-    /**
-     * Obtiene el ID del beneficiario.
-     *
-     * @return el ID.
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * Establece el ID del beneficiario.
-     *
-     * @param id el ID a asignar.
-     */
-    public void setId(Long id) {
-        this.id = id;
     }
 
     /**

@@ -30,16 +30,11 @@ public class ClienteController {
      * Realiza una petición GET real al sistema remoto.
      *
      * @param curp El identificador único del cliente (18 caracteres).
-     * @return Un ResponseEntity con el JSON del cliente o un error 503 si el sistema no responde.
+     * @return Un ResponseEntity con el JSON del cliente o un error si no se encuentra o el sistema no responde.
      */
     @GetMapping("/{curp}")
     public ResponseEntity<String> consultar(@PathVariable String curp) {
-        try {
-            return ResponseEntity.ok(service.consultarCliente(curp));
-        } catch (Exception e) {
-            return ResponseEntity.status(503)
-                    .body("{\"error\":\"Sistema Dueno no disponible\"}");
-        }
+        return ResponseEntity.ok(service.consultarCliente(curp));
     }
 
     /**
