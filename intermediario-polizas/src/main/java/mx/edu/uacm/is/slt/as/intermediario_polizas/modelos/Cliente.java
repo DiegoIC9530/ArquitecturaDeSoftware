@@ -1,57 +1,44 @@
 package mx.edu.uacm.is.slt.as.intermediario_polizas.modelos;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import java.time.LocalDate;
 
 /**
- * Entidad JPA que representa la tabla 'cliente' en la base de datos PostgreSQL.
+ * Datos del cliente asegurado, tal como los maneja el Sistema Dueño.
  */
-@Entity
-@Table(name = "cliente")
 public class Cliente {
 
     /**
-     * Llave primaria (PK), CURP del cliente (longitud 18).
+     * CURP del cliente (longitud 18).
      */
-    @Id
-    @Column(name = "curp", length = 18, nullable = false, unique = true)
     private String curp;
 
     /**
      * Nombres del cliente.
      */
-    @Column(name = "nombres", length = 128, nullable = false)
     private String nombres;
 
     /**
      * Primer apellido del cliente.
      */
-    @Column(name = "primer_apellido", length = 128, nullable = false)
     private String primerApellido;
 
     /**
      * Segundo apellido del cliente (opcional).
      */
-    @Column(name = "segundo_apellido", length = 128, nullable = true)
     private String segundoApellido;
 
     /**
      * Dirección física del cliente.
      */
-    @Column(name = "direccion", length = 512, nullable = false)
     private String direccion;
 
     /**
      * Fecha de nacimiento del cliente.
      */
-    @Column(name = "fecha_nacimiento", nullable = false)
     private LocalDate fechaNacimiento;
 
     /**
-     * Constructor por defecto exigido por JPA.
+     * Constructor por defecto, necesario para convertir los datos JSON.
      */
     public Cliente() {
     }

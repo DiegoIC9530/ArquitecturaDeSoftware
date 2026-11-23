@@ -1,15 +1,17 @@
 package mx.edu.uacm.is.slt.as.intermediario_polizas.adaptadores;
 
+import mx.edu.uacm.is.slt.as.intermediario_polizas.excepciones.RecursoNoEncontradoException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Adaptador de salida que encapsula la comunicación con el Sistema Dueño.
- * Las capas internas no conocen detalles HTTP; reciben y entregan valores simples.
  * Las rutas siguen el listado de servicios REST de la documentación del Sistema Dueño.
  */
 @Component
@@ -28,47 +30,62 @@ public class SistemaDuenoAdapter {
     // ---------- LECTURA ----------
 
     public String obtenerCliente(String curp) {
-        return restClient.get()
+        return sinContenido(restClient.get()
                 .uri("/cliente/{curp}", curp)
                 .retrieve()
-                .body(String.class);
+                .body(String.class), "Cliente no encontrado: " + curp);
     }
 
     public String obtenerPoliza(String clave) {
-        return restClient.get()
+        return sinContenido(restClient.get()
                 .uri("/poliza/{clave}", clave)
                 .retrieve()
-                .body(String.class);
+                .body(String.class), "Póliza no encontrada: " + clave);
     }
 
     public String obtenerTodasLasPolizas() {
-        return restClient.get()
+        return listaSinContenido(restClient.get()
                 .uri("/polizas")
                 .retrieve()
-                .body(String.class);
+                .body(String.class));
     }
 
     public String obtenerPolizasPorCliente(String curp) {
-        return restClient.get()
+        return listaSinContenido(restClient.get()
                 .uri("/polizas/{curp}", curp)
                 .retrieve()
-                .body(String.class);
+                .body(String.class));
     }
 
     public String obtenerPolizasPorTipo(int tipo) {
-        return restClient.get()
+        return listaSinContenido(restClient.get()
                 .uri("/polizas/{tipo}", tipo)
                 .retrieve()
-                .body(String.class);
+                .body(String.class));
     }
 
     public String obtenerBeneficiario(String fechaNacimiento, String clavePoliza,
-                                      String nombres, String primerApellido) {
-        return restClient.get()
-                .uri("/beneficiario/{fecha}/{clave}/{nombres}/{apellido}",
-                     fechaNacimiento, clavePoliza, nombres, primerApellido)
+                                      String nombres, String primerApellido, String segundoApellido) {
+        String[] v = valores(fechaNacimiento, clavePoliza, nombres, primerApellido, segundoApellido);
+        return sinContenido(restClient.get()
+                .uri(plantilla("/beneficiario", v.length), (Object[]) v)
                 .retrieve()
-                .body(String.class);
+                .body(String.class), "Beneficiario no encontrado");
+    }
+
+    // ---------- EXISTENCIA (para confirmar escrituras) ----------
+
+    public boolean existeCliente(String curp) {
+        return existe(() -> obtenerCliente(curp));
+    }
+
+    public boolean existePoliza(String clave) {
+        return existe(() -> obtenerPoliza(clave));
+    }
+
+    public boolean existeBeneficiario(String fechaNacimiento, String clavePoliza,
+                                      String nombres, String primerApellido, String segundoApellido) {
+        return existe(() -> obtenerBeneficiario(fechaNacimiento, clavePoliza, nombres, primerApellido, segundoApellido));
     }
 
     // ---------- ESCRITURA: CLIENTES ----------
@@ -128,6 +145,37 @@ public class SistemaDuenoAdapter {
     }
 
     // ---------- AUXILIARES ----------
+
+    /** Una respuesta vacía o nula significa que el registro no existe. */
+    private static String sinContenido(String cuerpo, String mensaje) {
+        if (cuerpo == null || cuerpo.isBlank() || cuerpo.trim().equals("null")) {
+            throw new RecursoNoEncontradoException(mensaje);
+        }
+        return cuerpo;
+    }
+
+    /** Una lista vacía o nula se devuelve como lista vacía. */
+    private static String listaSinContenido(String cuerpo) {
+        if (cuerpo == null || cuerpo.isBlank() || cuerpo.trim().equals("null")) {
+            return "[]";
+        }
+        return cuerpo;
+    }
+
+    /** Un registro existe si su consulta devuelve datos; 404 o respuesta vacía significan que no existe. */
+    private static boolean existe(Supplier<String> consulta) {
+        try {
+            consulta.get();
+            return true;
+        } catch (RecursoNoEncontradoException e) {
+            return false;
+        } catch (RestClientResponseException e) {
+            if (e.getStatusCode().value() == 404) {
+                return false;
+            }
+            throw e;
+        }
+    }
 
     /** Convierte los valores a texto, omitiendo los nulos (p. ej. segundo apellido ausente). */
     private static String[] valores(Object... partes) {

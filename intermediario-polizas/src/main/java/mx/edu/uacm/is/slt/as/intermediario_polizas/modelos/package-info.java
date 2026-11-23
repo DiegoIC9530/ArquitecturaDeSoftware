@@ -1,5 +1,5 @@
 /**
  * Capa de Modelos / Dominio.
- * Contiene las entidades JPA y objetos de dominio de la base de datos.
+ * Objetos de dominio con los datos del Sistema Dueño.
  */
 package mx.edu.uacm.is.slt.as.intermediario_polizas.modelos;

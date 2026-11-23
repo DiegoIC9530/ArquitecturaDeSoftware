@@ -1,55 +1,40 @@
 package mx.edu.uacm.is.slt.as.intermediario_polizas.modelos;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.UUID;
 
 /**
- * Entidad JPA que representa la tabla 'poliza' en la base de datos PostgreSQL.
+ * Datos de la póliza de seguro, tal como los maneja el Sistema Dueño.
  */
-@Entity
-@Table(name = "poliza")
 public class Poliza {
 
     /**
-     * Llave primaria (PK), identificador único UUID de la póliza.
+     * identificador único UUID de la póliza.
      */
-    @Id
-    @Column(name = "clave", nullable = false, updatable = false)
     private UUID clave;
 
     /**
      * Tipo de póliza: 0 (Auto), 1 (Vida), 2 (Médico).
      */
-    @Column(name = "tipo", nullable = false)
     private Integer tipo;
 
     /**
      * Monto de la póliza con precisión NUMERIC(9,2).
      */
-    @Column(name = "monto", precision = 9, scale = 2, nullable = false)
     private BigDecimal monto;
 
     /**
      * Descripción o detalle de la póliza.
      */
-    @Column(name = "descripcion", columnDefinition = "TEXT", nullable = false)
     private String descripcion;
 
     /**
-     * Relación Muchos a Uno con la entidad Cliente (Llave Foránea 'curp_cliente').
+     * Cliente asegurado al que pertenece la póliza.
      */
-    @ManyToOne
-    @JoinColumn(name = "curp_cliente", referencedColumnName = "curp", nullable = false)
     private Cliente cliente;
 
     /**
-     * Constructor vacío exigido por JPA.
+     * Constructor por defecto, necesario para convertir los datos JSON.
      */
     public Poliza() {
     }
