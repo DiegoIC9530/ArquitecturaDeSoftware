@@ -2,6 +2,8 @@ package mx.edu.uacm.is.slt.as.intermediario_polizas.servicios;
 
 import mx.edu.uacm.is.slt.as.intermediario_polizas.adaptadores.SistemaDuenoAdapter;
 import mx.edu.uacm.is.slt.as.intermediario_polizas.excepciones.OperacionNoConfirmadaException;
+import mx.edu.uacm.is.slt.as.intermediario_polizas.excepciones.RecursoNoEncontradoException;
+import mx.edu.uacm.is.slt.as.intermediario_polizas.excepciones.RegistroDuplicadoException;
 import mx.edu.uacm.is.slt.as.intermediario_polizas.modelos.Poliza;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,13 @@ public class PolizaService {
     public String altaPoliza(Poliza p) {
         validarPoliza(p);
         requerido(p.getClave(), "clave");
+        String clave = p.getClave().toString();
+        if (!adaptador.existeCliente(p.getCliente().getCurp())) {
+            throw new RecursoNoEncontradoException("El cliente " + p.getCliente().getCurp() + " no está registrado");
+        }
+        if (adaptador.existePoliza(clave)) {
+            throw new RegistroDuplicadoException("La póliza " + clave + " ya existe");
+        }
         adaptador.altaPoliza(p.getClave().toString(), p.getTipo(), p.getMonto().toPlainString(),
                 p.getDescripcion(), p.getCliente().getCurp());
         return confirmar(p.getClave().toString(), "El alta");
@@ -46,6 +55,9 @@ public class PolizaService {
 
     public String modificarPoliza(String clave, Poliza p) {
         validarPoliza(p);
+        if (p.getClave() != null && !clave.equals(p.getClave().toString())) {
+            throw new IllegalArgumentException("La clave del cuerpo (" + p.getClave() + ") no coincide con la de la URL (" + clave + ")");
+        }
         adaptador.modificarPoliza(clave, p.getTipo(), p.getMonto().toPlainString(),
                 p.getDescripcion(), p.getCliente().getCurp());
         return confirmar(clave, "La modificación");

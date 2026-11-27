@@ -2,6 +2,7 @@ package mx.edu.uacm.is.slt.as.intermediario_polizas.servicios;
 
 import mx.edu.uacm.is.slt.as.intermediario_polizas.adaptadores.SistemaDuenoAdapter;
 import mx.edu.uacm.is.slt.as.intermediario_polizas.excepciones.OperacionNoConfirmadaException;
+import mx.edu.uacm.is.slt.as.intermediario_polizas.excepciones.RegistroDuplicadoException;
 import mx.edu.uacm.is.slt.as.intermediario_polizas.modelos.Cliente;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,9 @@ public class ClienteService {
 
     public String altaCliente(Cliente c) {
         validarCliente(c);
+        if (adaptador.existeCliente(c.getCurp())) {
+            throw new RegistroDuplicadoException("El cliente con CURP " + c.getCurp() + " ya está registrado");
+        }
         adaptador.altaCliente(c.getCurp(), c.getDireccion(), c.getFechaNacimiento(),
                 c.getNombres(), c.getPrimerApellido(), c.getSegundoApellido());
         return confirmar(c.getCurp(), "El alta");
@@ -33,6 +37,9 @@ public class ClienteService {
 
     public String modificarCliente(String curp, Cliente c) {
         validarCliente(c);
+        if (!curp.equals(c.getCurp())) {
+            throw new IllegalArgumentException("La CURP del cuerpo (" + c.getCurp() + ") no coincide con la de la dirección (" + curp + ")");
+        }
         adaptador.modificarCliente(curp, c.getDireccion(), c.getFechaNacimiento(),
                 c.getNombres(), c.getPrimerApellido(), c.getSegundoApellido());
         return confirmar(curp, "La modificación");

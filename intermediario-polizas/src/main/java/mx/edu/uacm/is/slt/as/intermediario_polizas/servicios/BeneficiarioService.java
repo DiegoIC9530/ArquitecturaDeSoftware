@@ -2,6 +2,8 @@ package mx.edu.uacm.is.slt.as.intermediario_polizas.servicios;
 
 import mx.edu.uacm.is.slt.as.intermediario_polizas.adaptadores.SistemaDuenoAdapter;
 import mx.edu.uacm.is.slt.as.intermediario_polizas.excepciones.OperacionNoConfirmadaException;
+import mx.edu.uacm.is.slt.as.intermediario_polizas.excepciones.RecursoNoEncontradoException;
+import mx.edu.uacm.is.slt.as.intermediario_polizas.excepciones.RegistroDuplicadoException;
 import mx.edu.uacm.is.slt.as.intermediario_polizas.modelos.Beneficiario;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +42,12 @@ public class BeneficiarioService {
         }
         String fecha = b.getFechaNacimiento().toString();
         String clave = b.getPoliza().getClave().toString();
+        if (!adaptador.existePoliza(clave)) {
+            throw new RecursoNoEncontradoException("La póliza " + clave + " no existe");
+        }
+        if (adaptador.existeBeneficiario(fecha, clave, b.getNombres(), b.getPrimerApellido(), b.getSegundoApellido())) {
+            throw new RegistroDuplicadoException("El beneficiario ya está registrado en la póliza " + clave);
+        }
         adaptador.altaBeneficiario(b.getFechaNacimiento(), clave, b.getPorcentaje(),
                 b.getNombres(), b.getPrimerApellido(), b.getSegundoApellido());
         if (!adaptador.existeBeneficiario(fecha, clave, b.getNombres(), b.getPrimerApellido(), b.getSegundoApellido())) {
