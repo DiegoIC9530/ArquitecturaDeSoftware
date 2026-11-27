@@ -48,3 +48,24 @@ No requiere PostgreSQL.
 2. **Póliza**, que requiere un cliente registrado.
 3. **Beneficiario**, que requiere una póliza registrada.
 
+
+## Bitácora de cambios
+
+### 27 de noviembre de 2026
+
+**Flujo de altas y modificaciones**
+
+* **Cliente:** el alta se rechaza (409) si la CURP ya existe.
+* **Póliza:** el alta requiere un cliente registrado (404) y una clave que no esté repetida (409). Un cliente puede tener varias pólizas de distintos tipos.
+* **Beneficiario:** el alta requiere una póliza registrada (404) y el beneficiario no puede repetirse dentro de la misma póliza (409). Puede aparecer en varias pólizas distintas.
+* **Modificación de cliente y póliza:** la CURP o clave del cuerpo debe coincidir con la de la URL (400).
+
+**Archivos**
+
+* Nuevo: `excepciones/RegistroDuplicadoException.java`.
+* Modificados: `controladores/ManejadorErrores.java` (respuesta 409), `servicios/ClienteService.java`, `servicios/PolizaService.java`, `servicios/BeneficiarioService.java`.
+
+**Pendiente**
+
+* El proyecto no compila: `repositorios/` sigue presente y `target/` también, aunque la sección "Eliminados" indica que se quitaron.
+* Mejoras de seguridad, confiabilidad, página web y calidad del código, sujetas a verificación con la documentación del proyecto.

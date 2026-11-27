@@ -2,6 +2,7 @@ package mx.edu.uacm.is.slt.as.intermediario_polizas.controladores;
 
 import mx.edu.uacm.is.slt.as.intermediario_polizas.excepciones.OperacionNoConfirmadaException;
 import mx.edu.uacm.is.slt.as.intermediario_polizas.excepciones.RecursoNoEncontradoException;
+import mx.edu.uacm.is.slt.as.intermediario_polizas.excepciones.RegistroDuplicadoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,6 +24,12 @@ public class ManejadorErrores {
     @ExceptionHandler(RecursoNoEncontradoException.class)
     public ResponseEntity<String> noEncontrado(RecursoNoEncontradoException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("{\"error\":\"" + mensaje(e) + "\"}");
+    }
+
+    @ExceptionHandler(RegistroDuplicadoException.class)
+    public ResponseEntity<String> duplicado(RegistroDuplicadoException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body("{\"error\":\"" + mensaje(e) + "\"}");
     }
 
